@@ -1,0 +1,24 @@
+# Docker compose for ADS' "Agricultural Distribution Store" database
+# ------------------------------------------------------------------
+
+version: "3.9"
+
+services:
+  db:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: ads_mysql_db
+    ports:
+      - target: 3306
+        published: 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: ads
+    networks:
+      - mysql_network
+
+networks:
+  mysql_network:
+
+
+# EXECUTE THIS CONTAINER INSIDE ANOTHER CONTAINER
+# docker run -it --rm --network=ads_mysql_network mysql:latest ads
