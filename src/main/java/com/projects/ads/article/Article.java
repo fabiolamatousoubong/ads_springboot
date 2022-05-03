@@ -24,6 +24,9 @@ public class Article {
     private Integer quantity_min;
 
     public Article() {
+        if(this.reference == null){
+            this.reference = UUID.randomUUID().toString().replace("-", "").toUpperCase();
+        }
     }
 
     public Article(Long id, String reference, String name, String description, Integer quantity, Integer quantity_min) {
