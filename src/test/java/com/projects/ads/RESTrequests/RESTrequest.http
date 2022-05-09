@@ -1,19 +1,39 @@
+GET http://localhost:8080/api/v1/article HTTP/1.1
+
+
+###
+
+
 POST http://localhost:8080/api/v1/article HTTP/1.1
 content-type: application/json
 
+{
+  "reference": "8C1FCA0A427B4536A22E1D555BAEBAF0",
+  "name": "Paprika",
+  "description": "Paprika",
+  "quantity": "14",
+  "quantity_min": "2"
+}
 
-# {
-#     "reference": "8C1FCA0A427B4536A22E1D555BAEBAF0",
-#     "name": "Paprika",
-#     "description": "Paprika",
-#     "quantity": "14",
-#     "quantity_min": "2"
-# }
+
+###
+
+
+PUT http://localhost:8080/api/v1/article/2 HTTP/1.1
+content-type: application/json
 
 {
-   
-    "name": "Paprika",
-    "description": "Paprika",
-    "quantity": "14",
-    "quantity_min": "2"
+  "name": "Chili pepper",
+  "description": "Hot Chili pepper",
+  "quantity": "20",
+  "quantity_min": "1"
 }
+
+
+###
+
+
+DELETE http://localhost:8080/api/v1/article/1 HTTP/1.1
+
+
+###
