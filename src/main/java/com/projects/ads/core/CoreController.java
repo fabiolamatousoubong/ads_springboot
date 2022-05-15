@@ -10,9 +10,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class CoreController {
 
+    private final ArticleService articleService;
+
+    @Autowired
+    public CoreController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
+
     @GetMapping
     String indexController(Model model) {
         model.addAttribute("title", "ADS (Agricultural Distribution Store)");
+        model.addAttribute("articles", articleService.getArticles());
 
         return "index";
     }
