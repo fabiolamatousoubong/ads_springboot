@@ -1,5 +1,6 @@
 package com.projects.ads.article;
 
+import com.projects.ads.counter.CounterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +18,13 @@ public class ArticleController {
         abstract Object getArticles();
 
         @RequestMapping
-        abstract void addArticle(Article article);
+        abstract Object addArticle(Article article);
 
         @RequestMapping
-        abstract void updateArticle(Long articleId, Article article);
+        abstract Object updateArticle(Long articleId, Article article);
 
         @RequestMapping
-        abstract void deleteArticle(Long articleId);
+        abstract Object deleteArticle(Long articleId);
     }
 
     @RestController
@@ -43,22 +44,33 @@ public class ArticleController {
             return articleService.getArticles();
         }
 
+        @RequestMapping("/{articleId}")
+        public Article getOneArticle(@PathVariable Long articleId) {
+            return articleService.getOneArticle(articleId);
+        }
+
         @Override
         @PostMapping
-        public void addArticle(@RequestBody Article article) {
+        public String addArticle(@RequestBody Article article) {
             articleService.addArticle(article);
+
+            return "Article (" + article + ") added successfully!";
         }
 
         @Override
         @PutMapping(path = "{articleId}")
-        public void updateArticle(@PathVariable("articleId") Long articleId, @RequestBody Article article) {
+        public String updateArticle(@PathVariable("articleId") Long articleId, @RequestBody Article article) {
             articleService.updateArticle(articleId, article);
+
+            return "Article (" + article + ")  updated successfully!";
         }
 
         @Override
         @DeleteMapping(path = "{articleId}")
-        public void deleteArticle(@PathVariable("articleId") Long articleId) {
+        public String deleteArticle(@PathVariable("articleId") Long articleId) {
             articleService.deleteArticle(articleId);
+
+            return "Article  (" + articleId + ")  deleted successfully!";
         }
     }
 
@@ -67,10 +79,12 @@ public class ArticleController {
     static class ArticleHTMLController extends ArticleBaseController {
 
         private final ArticleService articleService;
+        private final CounterService counterService;
 
         @Autowired
-        public ArticleHTMLController(ArticleService articleService) {
+        public ArticleHTMLController(ArticleService articleService, CounterService counterService) {
             this.articleService = articleService;
+            this.counterService = counterService;
         }
 
         @Override
@@ -80,26 +94,31 @@ public class ArticleController {
 
             model.addObject("title", "Articles");
             model.addObject("articles", articleService.getArticles());
+            model.addObject("counter", counterService);
+
+            model.addObject("article", new Article());
 
             return model;
         }
 
         @Override
-        @PostMapping
-        public void addArticle(Article article) {
-            // TODO: Add instruction
+        @PostMapping(path = "/add")
+        public String addArticle(@ModelAttribute Article article) {
+            articleService.addArticle(article);
+
+            return "redirect:/v1/articles";
         }
 
         @Override
-        @PutMapping
-        public void updateArticle(Long articleId, Article article) {
-            // TODO: Add instruction
+        @PutMapping(path = "/update/{articleId}")
+        public ModelAndView updateArticle(@PathVariable("articleId") Long articleId, @ModelAttribute("article") Article article) {
+            return new ModelAndView("articles");
         }
 
         @Override
-        @DeleteMapping
-        public void deleteArticle(Long articleId) {
-            // TODO: Add instruction
+        @DeleteMapping(path = "/delete/{articleId}")
+        public ModelAndView deleteArticle(@PathVariable("articleId") Long articleId) {
+            return new ModelAndView("articles");
         }
     }
 }

@@ -2,6 +2,7 @@ package com.projects.ads.article;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -21,6 +22,12 @@ public class ArticleService {
 
     public List<Article> getArticles() {
         return articleRepository.findAll();
+    }
+
+    public Article getOneArticle(Long articleId) {
+        return articleRepository.findById(articleId).orElseThrow(
+                () -> new IllegalStateException("Article with id" + articleId + "does not exist.")
+        );
     }
     
     public void addArticle(Article article) {

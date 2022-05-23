@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta th:replace="fragments/imports :: imports">
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">ADS</title>
+</head>
+<body>
+
+<!-- Header -->
+<div th:replace="fragments/header :: header">
+    ...
+</div>
+<!-- End Header -->
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar Menu -->
+        <nav th:replace="fragments/sidebarMenu :: sidebarMenu">
+            ...
+        </nav>
+        <!-- END Sidebar Menu -->
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <!-- Main Content -->
+            <div layout:fragment="content">
+                <!-- ============================================================================ -->
+                <!-- This content is only used for static prototyping purposes (natural templates)-->
+                <!-- and is therefore entirely optional, as this markup fragment will be included -->
+                <!-- from "fragments/header.html" at runtime.                                     -->
+                <!-- ============================================================================ -->
+                <h1>Static content for prototyping purposes only</h1>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Praesent scelerisque neque neque, ac elementum quam dignissim interdum.
+                    Phasellus et placerat elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Praesent scelerisque neque neque, ac elementum quam dignissim interdum.
+                    Phasellus et placerat elit.
+                </p>
+            </div>
+            <div th:replace="fragments/footer :: footer">&copy; 2022
+                <a href="https://github.com/fabiolamatousoubong"><i>@fabiolamatousoubong</i></a> & <a
+                        href="https://github.com/christian80gabi"><i>@christian80gabi</i></a>
+            </div>
+            <!-- END Main Content -->
+        </main>
+    </div>
+</div>
+
+<div layout:fragment="customJavaScript">
+    ...
+</div>
+
+<!-- Index JavaScript -->
+<script src="../../static/js/index.js" th:src="@{/js/index.js}" type="text/javascript"></script>
+<!-- Bootstrap JavaScript Bundle with Popper @5.2.0-->
+<script src="../../static/js/bootstrap.bundle.min.js" th:src="@{/js/bootstrap.bundle.min.js}" type="text/javascript">
+</script>
+
+</body>
+</html>
