@@ -2,13 +2,13 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <head>
-    <meta th:replace="fragments/imports :: imports">
+    <meta th:replace="shared/fragments/imports :: imports">
     <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">ADS</title>
 </head>
 <body>
 
 <!-- Header -->
-<div th:replace="fragments/header :: header">
+<div th:replace="shared/fragments/header :: header">
     ...
 </div>
 <!-- End Header -->
@@ -16,7 +16,7 @@
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar Menu -->
-        <nav th:replace="fragments/sidebarMenu :: sidebarMenu">
+        <nav th:replace="shared/fragments/sidebarMenu :: sidebarMenu">
             ...
         </nav>
         <!-- END Sidebar Menu -->
@@ -38,7 +38,7 @@
                     Phasellus et placerat elit.
                 </p>
             </div>
-            <div th:replace="fragments/footer :: footer">&copy; 2022
+            <div th:replace="shared/fragments/footer :: footer">&copy; 2022
                 <a href="https://github.com/fabiolamatousoubong"><i>@fabiolamatousoubong</i></a> & <a
                         href="https://github.com/christian80gabi"><i>@christian80gabi</i></a>
             </div>

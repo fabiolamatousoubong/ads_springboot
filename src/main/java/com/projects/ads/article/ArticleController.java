@@ -17,6 +17,8 @@ public class ArticleController {
         @RequestMapping
         abstract Object getArticles();
 
+        abstract Object getOneArticle(Long articleId);
+
         @RequestMapping
         abstract Object addArticle(Article article);
 
@@ -44,6 +46,7 @@ public class ArticleController {
             return articleService.getArticles();
         }
 
+        @Override
         @RequestMapping("/{articleId}")
         public Article getOneArticle(@PathVariable Long articleId) {
             return articleService.getOneArticle(articleId);
@@ -88,9 +91,9 @@ public class ArticleController {
         }
 
         @Override
-        @GetMapping
+        @RequestMapping
         ModelAndView getArticles() {
-            ModelAndView model = new ModelAndView("articles");
+            ModelAndView model = new ModelAndView("articles/articles");
 
             model.addObject("title", "Articles");
             model.addObject("articles", articleService.getArticles());
@@ -102,7 +105,18 @@ public class ArticleController {
         }
 
         @Override
-        @PostMapping(path = "/add")
+        @RequestMapping(path = "/{articleId}", method = {RequestMethod.GET, RequestMethod.POST})
+        public ModelAndView getOneArticle(@PathVariable Long articleId) {
+            ModelAndView model = new ModelAndView("articles/fragments/updateForm :: updateForm");
+
+            Article article = articleService.getOneArticle(articleId);
+            model.addObject("article", article);
+
+            return model;
+        }
+
+        @Override
+        @RequestMapping(path = "/add", method = {RequestMethod.POST, RequestMethod.GET})
         public String addArticle(@ModelAttribute Article article) {
             articleService.addArticle(article);
 
@@ -110,15 +124,19 @@ public class ArticleController {
         }
 
         @Override
-        @PutMapping(path = "/update/{articleId}")
-        public ModelAndView updateArticle(@PathVariable("articleId") Long articleId, @ModelAttribute("article") Article article) {
-            return new ModelAndView("articles");
+        @RequestMapping(path = "/{articleId}/update", method = {RequestMethod.PUT, RequestMethod.POST, RequestMethod.GET})
+        public String updateArticle(@PathVariable("articleId") Long articleId, @ModelAttribute("article") Article article) {
+            articleService.updateArticle(articleId, article);
+
+            return "redirect:/v1/articles";
         }
 
         @Override
-        @DeleteMapping(path = "/delete/{articleId}")
-        public ModelAndView deleteArticle(@PathVariable("articleId") Long articleId) {
-            return new ModelAndView("articles");
+        @RequestMapping(path = "/{articleId}/delete", method = {RequestMethod.DELETE, RequestMethod.GET})
+        public String deleteArticle(@PathVariable("articleId") Long articleId) {
+            articleService.deleteArticle(articleId);
+
+            return "redirect:/v1/articles";
         }
     }
 }

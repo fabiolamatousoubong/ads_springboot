@@ -2,10 +2,9 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{assets/layout}">
+      layout:decorate="~{shared/layout}">
 <head>
     <title>Articles</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 
 <body>
@@ -67,40 +66,41 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                                     </button>
                                 </div>
-
-                                <form method="post" action="#">
-                                    <div class="modal-body row g-3">
-                                        <div class="col-12">
-                                            <label th:attr="for='name' + ${article.getId()}"
-                                                   class="form-label">Name</label>
-                                            <input type="text" class="form-control"
-                                                   th:attr="id='name' + ${article.getId()}">
+                                <div id="updateForm">
+                                    <form method="post" action="#">
+                                        <div class="modal-body row g-3">
+                                            <div class="col-12">
+                                                <label th:attr="for='name' + ${article.getId()}"
+                                                       class="form-label">Name</label>
+                                                <input type="text" class="form-control"
+                                                       th:attr="id='name' + ${article.getId()}">
+                                            </div>
+                                            <div class="col-12">
+                                                <label th:attr="for='description' + ${article.getId()}" class="form-label">Description</label>
+                                                <textarea class="form-control"
+                                                          th:attr="id='description' + ${article.getId()}"
+                                                          rows="3"></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label th:attr="for='quantity' + ${article.getId()}" class="form-label">Quantity</label>
+                                                <input type="number" class="form-control"
+                                                       th:attr="id='quantity' + ${article.getId()}">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label th:attr="for='quantity_min' + ${article.getId()}" class="form-label">Minimum
+                                                    Quantity</label>
+                                                <input type="number" class="form-control"
+                                                       th:attr="id='quantity_min' + ${article.getId()}">
+                                            </div>
                                         </div>
-                                        <div class="col-12">
-                                            <label th:attr="for='description' + ${article.getId()}" class="form-label">Description</label>
-                                            <textarea class="form-control"
-                                                      th:attr="id='description' + ${article.getId()}"
-                                                      rows="3"></textarea>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                Close
+                                            </button>
+                                            <button type="submit" class="btn btn-warning">Update</button>
                                         </div>
-                                        <div class="col-md-6">
-                                            <label th:attr="for='quantity' + ${article.getId()}" class="form-label">Quantity</label>
-                                            <input type="number" class="form-control"
-                                                   th:attr="id='quantity' + ${article.getId()}">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label th:attr="for='quantity_min' + ${article.getId()}" class="form-label">Minimum
-                                                Quantity</label>
-                                            <input type="number" class="form-control"
-                                                   th:attr="id='quantity_min' + ${article.getId()}">
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                            Close
-                                        </button>
-                                        <button type="submit" class="btn btn-warning">Update</button>
-                                    </div>
-                                </form>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -121,7 +121,8 @@
                                     </h3>
                                 </div>
                                 <div class="modal-footer">
-                                    <form action="" method="post">
+                                    <form action="articles.html"
+                                          th:action="@{/v1/articles/{articleId}/delete(articleId=${article.getId()})}">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                                             Close
                                         </button>
@@ -134,22 +135,28 @@
 
 
                     <script th:inline="javascript">
-                        $("#updateButton[[${article.getId()}]]").click(function () {
+                        $("#updateButton" + [[${article.getId()}]]).click(function () {
                             let articleId = $(this).children('span').html()
+                            let url = '/v1/articles/' + articleId
 
-                            console.log(articleId);
+                            console.log(url);
+
+                            let updateModal = $("#updateModal" + [[${article.getId()}]])
+                            let updateForm = updateModal.find("#updateForm")
 
                             $.ajax({
-                                url: '/api/v1/articles/' + articleId,
-
+                                url: url,
                                 data: {"articleId": articleId},
+                                type: "POST",
 
-                                dataType: 'json',
-                                type: "GET",
-                                contentType: 'application/json',
-                                success: function (result) {
-                                    console.log(result);
-                                    //$(discount_Amount).html(result.discount);
+                                success: function (fragment) {
+                                    console.log("SUCCESS: ", fragment);
+                                    console.log("var: article", [[${article}]]);
+
+                                    updateForm.replaceWith(fragment);
+                                },
+                                error: function (error) {
+                                    console.log("ERROR: ", error);
                                 }
                             });
                         });

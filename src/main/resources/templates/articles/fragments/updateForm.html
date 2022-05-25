@@ -1,0 +1,35 @@
+<!-- Update Form -->
+<form method="post" action="../articles.html"
+      xmlns:th="http://www.thymeleaf.org"
+      th:object="${article}"
+      th:action="@{/v1/articles/{articleId}/update(articleId=${article.getId()})}"
+      th:fragment="updateForm">
+    <div class="modal-body row g-3">
+        <div class="col-12">
+            <label for="reference" class="form-label">Reference</label>
+            <input type="text" class="form-control" id="reference" th:field="*{reference}">
+        </div>
+        <div class="col-12">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}">
+        </div>
+        <div class="col-12">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" rows="3" th:field="*{description}"></textarea>
+        </div>
+        <div class="col-md-6">
+            <label for="quantity" class="form-label">Quantity</label>
+            <input type="number" class="form-control" id="quantity" th:field="*{quantity}">
+        </div>
+        <div class="col-md-6">
+            <label for="quantity_min" class="form-label">Minimum Quantity</label>
+            <input type="number" class="form-control" id="quantity_min" th:field="*{quantity_min}">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            Close
+        </button>
+        <button type="submit" class="btn btn-warning">Update</button>
+    </div>
+</form>
